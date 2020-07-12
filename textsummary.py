@@ -146,32 +146,4 @@ def mainFunc(text):
 #print(mainFunc(inputText))
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#Pushing to git
