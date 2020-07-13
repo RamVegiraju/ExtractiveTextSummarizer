@@ -1,5 +1,5 @@
-"""
 import spacy
+import pandas as pd
 from spacy import displacy
 from collections import defaultdict
 nlp = spacy.load('en_core_web_sm')
@@ -24,13 +24,14 @@ def show_entities(text):
         if value in new_dict: 
             new_dict[value].append(key) 
         else: 
-            new_dict[value]=[key] 
-    return new_dict
+            new_dict[value]=[key]
+    entity_table = pd.DataFrame(new_dict.items())
+    return entity_table
 
 doc = nlp("We are working at Apple and Facebook and Microsoft located in Washington DC.")
 #displacy.render(doc,style='ent')
 print(show_entities(doc))
-"""
+
 
 #import nltk
 #from nltk.tokenize import word_tokenize, sent_tokenize
@@ -63,8 +64,3 @@ print(show_entities(doc))
 #sample_obj = {"Input": "We are testing this right now"}
 #data = sample_obj['Input']
 #print(data)
-
-
-
-
-

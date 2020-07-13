@@ -133,7 +133,8 @@ def show_entities(text):
             new_dict[value].append(key) 
         else: 
             new_dict[value]=[key] 
-    return new_dict
+    entity_table = pd.DataFrame(new_dict.items())
+    return entity_table
 
 #entities_summary = show_entities(inputText)
 #print(entities_summary)
