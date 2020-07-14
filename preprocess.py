@@ -22,12 +22,18 @@ file.close()
 
 
 class textPreProcessor():
+    """
+    A class for text preprocessing prior to text summarization and entity recognition.
+
+    Attribute(s):
+        text(str): The input text from user on front-end.
+    """
 
     def __init__(self,text):
         self.text = text
 
-    #Expanding Contractions
     def expand_contractions(self, contraction_mapping=contraction_map):
+        """Expand contractions"""
         contractions_pattern = re.compile('({})'.format('|'.join(contraction_mapping.keys())), 
                                       flags=re.IGNORECASE|re.DOTALL)
         def expand_match(contraction):
@@ -43,12 +49,12 @@ class textPreProcessor():
         expanded_text = re.sub("'", "", expanded_text)
         return expanded_text
     
-    #Converting to lowercase
     def text_lowercase(self): 
+        """Convert to lowercase"""
         return self.text.lower()
     
-    #Converting numbers to words
     def convert_number(self): 
+        """Convert numbers to words."""
         p = inflect.engine() 
         temp_str = self.text.split() 
         new_string = [] 
@@ -62,25 +68,18 @@ class textPreProcessor():
         temp_str = ' '.join(new_string) 
         return temp_str 
     
-    # remove punctuation 
     def remove_punctuation(self): 
+        """Remove punctuation."""
         translator = str.maketrans('', '', string.punctuation) 
         return self.text.translate(translator)
     
-    # remove whitespace from text 
     def remove_whitespace(self): 
+        """Remove whitespace."""
         return  " ".join(self.text.split())
-
-    #Lemmatization
+    
     def word_lemmatizer(self):
+        """Lemmatize words."""
         lemmatizer = WordNetLemmatizer()
         lem_text = [lemmatizer.lemmatize(i) for i in self.text]
         lemmas = ''.join(lem_text)
         return lemmas
-
-
-
-#inputText = "We're testing this right now, let's make sure it works!"
-#preProcessObj = textPreProcessor(inputText)
-#print(preProcessObj.expand_contractions(contraction_mapping=contraction_map))
-

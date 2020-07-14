@@ -20,7 +20,6 @@ from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
 from nltk.tokenize import word_tokenize, sent_tokenize
 from nltk.stem import WordNetLemmatizer
-#from preprocess import expand_contractions,text_lowercase,convert_number,remove_punctuation,remove_whitespace,word_lemmatizer, word_tokenizer, sentence_tokenizer
 from preprocess import textPreProcessor
 stopwords = nltk.corpus.stopwords.words('english')
 nlp = spacy.load('en_core_web_sm')
@@ -53,17 +52,40 @@ If you have not achieved the success you deserve and are considering giving up, 
 Vision + desire + dedication + patience + daily action leads to astonishing success. Are you willing to commit to this way of life or jump ship at the first sign of failure? I’m amused when I read questions written by millennials on Quora who ask how they can become rich and famous or the next Elon Musk. Success is a fickle and long game with highs and lows. Similarly, there are no assurances even if you’re an overnight sensation, to sustain it for long, particularly if you don’t have the mental and emotional means to endure it. This means you must rely on the one true constant in your favour: your personal development. The more you grow, the more you gain in terms of financial resources, status, success — simple. If you leave it to outside conditions to dictate your circumstances, you are rolling the dice on your future.
 So become intentional on what you want out of life. Commit to it. Nurture your dreams. Focus on your development and if you want to give up, know what’s involved before you take the plunge. Because I assure you, someone out there right now is working harder than you, reading more books, sleeping less and sacrificing all they have to realise their dreams and it may contest with yours. Don’t leave your dreams to chance."""
 
+#find entities in text
+def find_entities(text):
+    text = nlp(text)
+    named_entities = {}
+    if text.ents:
+        for ent in text.ents:
+            named_entities[ent] = ent.label_
+    else:
+        pass
+    return named_entities
+
+#output entities in text
+def show_entities(text):
+    new_dict = {}
+    named_entities = find_entities(text)
+    for key, value in named_entities.items(): 
+        if value in new_dict: 
+            new_dict[value].append(key) 
+        else: 
+            new_dict[value]=[key] 
+    #entity_table = pd.DataFrame(new_dict.items())
+    return new_dict
+
 #summarizer function
 def freq_calculator(text):
-
+    #Initalizing Preprocessing Class
     preProcessor = textPreProcessor(text)
 
-    #Applying preprocessing functions
+    #Applying preprocessing methods
     text = preProcessor.expand_contractions(contraction_mapping=contraction_map)
     text = preProcessor.text_lowercase()
     text = preProcessor.convert_number()
     text = preProcessor.remove_whitespace()
-    #text = remove_punctuation(text)
+    #text = preProcessor.remove_punctuation(text)
     #text = preProcessor.word_lemmatizer()
 
     #storing word frequencies and removing stop words
@@ -103,38 +125,12 @@ def freq_calculator(text):
         summary_sentences = heapq.nlargest(5, sentence_scores, key=sentence_scores.get)
         summary = ' '.join(summary_sentences)
         summary = summary.capitalize()
+    
+    text_ents = show_entities(summary)
     return summary
 
-#sample_obj = {"Input": "Those Who Are Resilient Stay In The Game Longer."}
-#print(freq_calculator(sample_obj))
+#print(freq_calculator(inputText))
 
-#find entities in summary
-def find_entities(text):
-    text = nlp(text)
-    named_entities = {}
-    if text.ents:
-        for ent in text.ents:
-            named_entities[ent] = ent.label_
-    else:
-        pass
-    return named_entities
-
-#output entities in summary
-def show_entities(text):
-    #summaryText = freq_calculator(text)
-    new_dict = {}
-    #new_dict = defaultdict(set)
-    named_entities = find_entities(text)
-    for key, value in named_entities.items(): 
-        if value in new_dict: 
-            new_dict[value].append(key) 
-        else: 
-            new_dict[value]=[key] 
-    entity_table = pd.DataFrame(new_dict.items())
-    return entity_table
-
-#entities_summary = show_entities(inputText)
-#print(entities_summary)
 
 def mainFunc(text):
     summary = freq_calculator(text)

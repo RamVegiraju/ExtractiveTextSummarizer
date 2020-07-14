@@ -25,12 +25,12 @@ def show_entities(text):
             new_dict[value].append(key) 
         else: 
             new_dict[value]=[key]
-    entity_table = pd.DataFrame(new_dict.items())
-    return entity_table
+    #entity_table = pd.DataFrame(new_dict.items())
+    return new_dict
 
 doc = nlp("We are working at Apple and Facebook and Microsoft located in Washington DC.")
 #displacy.render(doc,style='ent')
-print(show_entities(doc))
+#print(show_entities(doc))
 
 
 #import nltk
