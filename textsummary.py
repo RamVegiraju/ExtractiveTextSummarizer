@@ -20,7 +20,8 @@ from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
 from nltk.tokenize import word_tokenize, sent_tokenize
 from nltk.stem import WordNetLemmatizer
-from preprocess import expand_contractions,text_lowercase,convert_number,remove_punctuation,remove_whitespace,word_lemmatizer, word_tokenizer, sentence_tokenizer
+#from preprocess import expand_contractions,text_lowercase,convert_number,remove_punctuation,remove_whitespace,word_lemmatizer, word_tokenizer, sentence_tokenizer
+from preprocess import textPreProcessor
 stopwords = nltk.corpus.stopwords.words('english')
 nlp = spacy.load('en_core_web_sm')
 
@@ -52,22 +53,18 @@ If you have not achieved the success you deserve and are considering giving up, 
 Vision + desire + dedication + patience + daily action leads to astonishing success. Are you willing to commit to this way of life or jump ship at the first sign of failure? I’m amused when I read questions written by millennials on Quora who ask how they can become rich and famous or the next Elon Musk. Success is a fickle and long game with highs and lows. Similarly, there are no assurances even if you’re an overnight sensation, to sustain it for long, particularly if you don’t have the mental and emotional means to endure it. This means you must rely on the one true constant in your favour: your personal development. The more you grow, the more you gain in terms of financial resources, status, success — simple. If you leave it to outside conditions to dictate your circumstances, you are rolling the dice on your future.
 So become intentional on what you want out of life. Commit to it. Nurture your dreams. Focus on your development and if you want to give up, know what’s involved before you take the plunge. Because I assure you, someone out there right now is working harder than you, reading more books, sleeping less and sacrificing all they have to realise their dreams and it may contest with yours. Don’t leave your dreams to chance."""
 
-#print(len(inputText))
-#print('---------------')
-#print("that is the length of the input")
-
 #summarizer function
 def freq_calculator(text):
-    #sample_json = json.dumps(sample_json)
-    #sample_json = json.loads(sample_json)
-    #text = sample_json["Input"]
+
+    preProcessor = textPreProcessor(text)
 
     #Applying preprocessing functions
-    #text = expand_contractions(text, contraction_mapping=contraction_map)
-    text = text_lowercase(text)
-    text = convert_number(text)
+    text = preProcessor.expand_contractions(contraction_mapping=contraction_map)
+    text = preProcessor.text_lowercase()
+    text = preProcessor.convert_number()
+    text = preProcessor.remove_whitespace()
     #text = remove_punctuation(text)
-    text = remove_whitespace(text)
+    #text = preProcessor.word_lemmatizer()
 
     #storing word frequencies and removing stop words
     word_frequencies = {}
@@ -145,6 +142,3 @@ def mainFunc(text):
     return summary, entity_dict
 
 #print(mainFunc(inputText))
-
-
-#Pushing to git
