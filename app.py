@@ -5,9 +5,13 @@ import requests
 import spacy 
 from spacy import displacy
 nlp = spacy.load('en_core_web_sm')
+from flaskext.markdown import Markdown
 
 
 app = Flask(__name__)
+Markdown(app)
+
+#HTML_WRAPPER = """<div style="overflow-x: auto; border: 1px solid #e6e9ef; border-radius: 0.25rem; padding: 1rem">{}</div>"""
 
 @app.route('/', methods = ["GET","POST"]) 
 def index():
@@ -15,17 +19,18 @@ def index():
         input_text = request.form.get('url')
         #text_content = freq_calculator(input_text)
         summary = freq_calculator(input_text)
-        #entities = show_entities(summary)
         return summary
     return render_template("index.html")
 
-#@app.route('/NER', methods=["GET","POST"])
-#def namedEntity():
-    #if request.method == "POST":
-        #input_text = request.form.get('entrecognition')
-        #entities = show_entities(input_text)
-        #return entities
-    #return render_template("tables.html", tables = [entities.to_html(classes='data')], titles = entities.columns.values)
+@app.route('/NER', methods=["GET","POST"])
+def namedEntity():
+    if request.method == "POST":
+        rawtext = request.form['rawtext']
+        docs = nlp(rawtext)
+        result = displacy.render(docs,style='ent')
+        #result = result.replace("\n\n","\n")
+        #result = HTML_WRAPPER.format(html)
+    return render_template("results.html", rawtext = rawtext, result=result)
 
 
 if __name__ =='__main__':
